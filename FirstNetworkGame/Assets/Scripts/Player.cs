@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
-
 using UnityEngine.Networking;
+using UnityEngine.UI;
 public class Player : NetworkBehaviour 
 {
 	[SyncVar]
 	public Color color;
 	[SyncVar]
 	public int score;
+
 	public GameObject bulletPrefab;
 	float moveSpeed = 1.875f;
 
+	private Text scoreText;
 	public override void OnStartClient() 
 	{
 		gameObject.GetComponent<Renderer>().material.color = color;
+		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
 	}
 
 
@@ -57,8 +60,11 @@ public class Player : NetworkBehaviour
 	
 	void Update () 
 	{
-		if(isLocalPlayer) 
-			GetInput();
+		if (isLocalPlayer) 
+		{
+			GetInput ();
+			scoreText.text = "Score: " + score;
+		}
 		
 	}
 }
