@@ -6,6 +6,8 @@ public class Bullet : NetworkBehaviour
 {
 	[SyncVar]
 	public Color color;
+	[SyncVar]
+	public NetworkInstanceId parentNetId;
 	
 	public override void OnStartClient() 
 	{
@@ -14,7 +16,12 @@ public class Bullet : NetworkBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		Destroy(other.gameObject);
+		if (isServer) 
+		{
+			Player player = ClientScene.FindLocalObject (parentNetId).GetComponent<Player> ();
+			player.score += 100;
+			Destroy (other.gameObject);
+		}
 	}
 	// Update is called once per frame
 	void Update () {
